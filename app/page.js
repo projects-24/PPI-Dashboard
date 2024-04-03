@@ -1,4 +1,5 @@
-import React from 'react'
+"use client";
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link'
 import { PiList } from 'react-icons/pi';
 import Button from 'funuicss/ui/button/Button'
@@ -11,97 +12,107 @@ import Grid from 'funuicss/ui/grid/Grid'
 import Col from 'funuicss/ui/grid/Col'
 import SectionCard from '@/components/Card';
 import dynamic from 'next/dynamic'
+import data, {graphData} from '../components/data'
+import InitialStatistics from '../components/IntialStatistics'
+import {PiArrowDown, PiArrowUp, PiUsersDuotone,  PiVoicemailDuotone} from 'react-icons/pi'
+import { MdDeleteForever } from "react-icons/md";
+import Navigation from "@/components/Navigation";
+import MainContent from "@/components/content";
+import MainGraph from "@/components/MainGraph";
+import Card from "funuicss/ui/card/Card";
+import MainChart from "@/components/MainGraph";
+import Table from "funuicss/ui/table/Table";
+import Section from "funuicss/ui/specials/Section";
+
 const Chart = dynamic(()=>import("@/components/Graph") ,{ssr:false})
+const GraphChart = dynamic(() => import("@/components/RangeGraph"), { ssr: false })
+
+const statisticsData = [
+    {
+        icon: PiUsersDuotone,
+        title: 'Total Cases',
+        value: '20,000',
+        arrowIcon: <PiArrowUp /> ,
+        arrowColor: 'success',
+        arrowText: '223',
+        bg:"primary"
+    },
+
+    {
+        icon: PiVoicemailDuotone,
+        title: 'Partial Saved Cases',
+        value: '123',
+        arrowIcon: <PiArrowUp /> ,
+        arrowColor: 'success',
+        arrowText: '100',
+        bg:"dark"
+    },
+
+    {
+        icon: MdDeleteForever,
+        title: 'Deleted Cases',
+        value: '123',
+        arrowIcon: <PiArrowDown /> ,
+        arrowColor: 'error',
+        arrowText: '100',
+        bg:"error"
+    },
+];
+
+
+
 export default function Home() {
-  const data = [
-    {
-      "title" : "First data" ,
-      "id" : "1",
-      "sub_title" : "This is the sub heading for the first grah over here, you can choose to change the content of this tex" ,
-      "data" : [
-        { y: 67, label: "Children" },
-        { y: 28, label: "Adults" },
-        { y: 10, label: "Aged" },
-      ]
-    }
-    ,
-    {
-      "title" : "Second data" ,
-      "id" : "2",
-      "sub_title" : "This is the sub heading for the first grah over here, you can choose to change the content of this tex" ,
-      "data" : [
-        { y: 67, label: "Children" },
-        { y: 28, label: "Adults" },
-        { y: 10, label: "Aged" },
-      ]
-    }
-    ,
-    {
-      "title" : "Third data" ,
-      "id" : "3",
-      "sub_title" : "This is the sub heading for the first grah over here, you can choose to change the content of this tex" ,
-      "data" : [
-        { y: 67, label: "Children" },
-        { y: 28, label: "Adults" },
-        { y: 10, label: "Aged" },
-      ]
-    }
-    ,
-    {
-      "title" : "Forth data" ,
-      "id" : "4",
-      "sub_title" : "This is the sub heading for the first grah over here, you can choose to change the content of this tex" ,
-      "data" : [
-        { y: 67, label: "Children" },
-        { y: 28, label: "Adults" },
-        { y: 10, label: "Aged" },
-      ]
-    }
-  ]
-  return (
-    <div className='padding-top-40'>
+
+useEffect(() => {
+    console.log(data)
+},[])
+    return (
+        <div >
+            <Navigation />
+            <MainContent >
+             <div className={"padding-20"}>
+                  <Div padding="20" funcss={"dark800 roundEdgeSmall padding-20 text-dark"} margin="2rem 0 2rem 0">
+                      <div className={"padding"}>
+                          <Text
+                              text="Ghana Statistical Service"
+                              heading="h1"
+                              bold
+                              color="primary"
+                              block
+                          />
+                          <Text
+                              text="Producer Price Index (PPI) Dashboard"
+                              bold
+                              color="dark200"
+                              block
+                          />
+
+                      </div>
+                      <Section />
+                      <Div>
+                         <InitialStatistics statisticsData={statisticsData} />
+                      </Div>
+              </Div>
 
 
- <Container>
-  <Div padding="0.5rem" margin="0 0 2rem 0">
-    <Text 
-    text="Ghana"
-    heading="h1"
-    bold
-    color="primary"
-    block
-    />
-    <Text 
-    text="Statistical service data"
-    heading="h2"
-    bold
-    color="dark200"
-    block
-    />
-    <Text 
-    text="This is the sub heading for the first grah over here, you can choose to change the content of this tex"
-    color="dark400"
-    article
-    />
-  </Div>
-  <Grid>
- {
-  data &&
-  data.map(mdoc => (
-    <Col sm={12} md={6} lg={6} funcss="padding" key={mdoc.id}>
-    <SectionCard 
-    heading={mdoc.title} 
-    sub_heading={mdoc.sub_title}
-    body={<Chart title={"Heading One"} data={mdoc.data}
-    id={mdoc.id}
-    />}
-    
-    />
-  </Col>
-  ))
- }
-  </Grid>
- </Container>
-    </div>
-  )
-}
+<div>
+    <Card
+        header={<div className={"padding bb"}>
+            <Text text={"main"} block/>
+            <Text heading={"h3"} text={"Graph"} bold block/>
+        </div>}
+        funcss='roundEdge padding-20'
+        xl
+        body={<div>
+            <MainGraph />
+        </div>}
+
+        />
+</div>
+
+
+             </div>
+            </MainContent>
+        </div>
+      )
+    }

@@ -5,6 +5,7 @@ export default function SectionCard({heading, sub_heading, body}) {
   return (
     <Card
     funcss="roundEdge padding"
+    xl
     header={<div className='bb padding-bottom-10'>
     <Text 
     text={heading}

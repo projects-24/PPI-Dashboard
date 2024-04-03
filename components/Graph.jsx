@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect } from 'react'
-import CanvasJSReact from '@canvasjs/charts'; 
-export default function Chart({id , data , title}) {
+import CanvasJSReact from '@canvasjs/charts';
+
+function Chart({id , data , title, height}) {
     useEffect(() => {
         const chart = new CanvasJSReact.Chart(id, {
           animationEnabled: true,
@@ -12,7 +13,7 @@ export default function Chart({id , data , title}) {
           data: [{
             type: "doughnut",
             startAngle: 60,
-            //innerRadius: 60,
+            // innerRadius: 60,
             indexLabelFontSize: 17,
             indexLabel: "{label} - #percent%",
             toolTipContent: "<b>{label}:</b> {y} (#percent%)",
@@ -21,10 +22,14 @@ export default function Chart({id , data , title}) {
         });
         chart.render();
       }, []);
-  return (
-    <div>
-    
-              <div id={id} className='lighter' style={{ height: '250px', width: '100%' }}></div>
-    </div>
+
+
+
+    return (
+        <div>
+              <div id={id} className='lighter' style={{ height: height ? height : '250px', width: '100%' }}></div>
+        </div>
   )
 }
+
+export default Chart
