@@ -6,11 +6,11 @@ import Grid from "funuicss/ui/grid/Grid";
 import Col from "funuicss/ui/grid/Col";
 import Card from "funuicss/ui/card/Card";
 import Text from "funuicss/ui/text/Text";
-import MainChart from "@/components/MainGraph";
 import data from "@/components/data";
 import Section from "funuicss/ui/specials/Section";
 import Table from "funuicss/ui/table/Table";
 import dynamic from "next/dynamic";
+const MainChart = dynamic(()=>import("@/components/MainGraph") ,{ssr:false})
 const Chart = dynamic(()=>import("@/components/Graph") ,{ssr:false})
 const GraphChart = dynamic(() => import("@/components/RangeGraph"), { ssr: false })
 
