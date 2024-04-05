@@ -2,18 +2,12 @@
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link'
 import { PiChecks, PiDiamondsFour, PiList, PiTrash } from 'react-icons/pi';
-import Button from 'funuicss/ui/button/Button'
-import AppBar from 'funuicss/ui/appbar/AppBar'
 import Text from 'funuicss/ui/text/Text'
 import RowFlex from 'funuicss/ui/specials/RowFlex'
-import Container from "funuicss/ui/container/Container"
 import Div from "funuicss/ui/div/Div"
 import Grid from 'funuicss/ui/grid/Grid'
 import Col from 'funuicss/ui/grid/Col'
-import SectionCard from '@/components/Card';
 import dynamic from 'next/dynamic'
-import data, {graphData} from '@/components/data'
-import InitialStatistics from '@/components/IntialStatistics'
 import {PiArrowDown, PiArrowUp, PiUsersDuotone,  PiVoicemailDuotone} from 'react-icons/pi'
 import { MdDeleteForever } from "react-icons/md";
 import Navigation from "@/components/Navigation";
@@ -24,7 +18,6 @@ import Axios from "axios"
 import { URI } from '@/functions/endpoint';
 
 const MainGraph = dynamic(()=>import("@/components/MainGraph") ,{ssr:false})
-const GraphChart = dynamic(() => import("@/components/RangeGraph"), { ssr: false })
 
 const statisticsData = [
     {
