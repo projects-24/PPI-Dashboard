@@ -12,7 +12,7 @@ function MainChart({data}) {
             animationEnabled: true,
             theme: "light2", // "light1", "light2", "dark1", "dark2"
             title: {
-                text: "Producer Price Index (PPI) (2024)"
+                text: "Producer Price Index (PPI) "
             },
             axisY: {
                 title: "Growth Rate (in %)",
