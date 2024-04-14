@@ -31,7 +31,7 @@ const Navigation = ({title}) => {
         }
         ,
         {
-            "route" : "/" ,
+            "route" : "/validation" ,
             "icon" : <PiChecks /> ,
             "text" : "Validation" ,
         }

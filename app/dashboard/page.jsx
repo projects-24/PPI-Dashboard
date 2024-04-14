@@ -216,8 +216,8 @@ export default function Home() {
 <div>
     <Card
         header={<div className={"padding bb"}>
-            <Text text={"main"} block/>
-            <Text heading={"h3"} text={"Graph"} bold block/>
+            <Text text={"Total"} block/>
+            <Text heading={"h3"} text={"Case Submission"} bold block/>
         </div>}
         funcss='roundEdge'
         xl

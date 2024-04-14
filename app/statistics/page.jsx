@@ -20,40 +20,69 @@ import RowFlex from 'funuicss/ui/specials/RowFlex'
 import { PiEye } from 'react-icons/pi';
 import Circle from "funuicss/ui/specials/Circle"
 const Statistics = ()=>{
-const data_table = {
-    "data":[] ,
-    "titles":["Title One","Title Two","Title Three","Title Four","Title Five","Title"],
-}
 
-const [outlier_data, setoutlier_data] = useState(null) 
 
-const GetOutlier = (req) => {
-    Axios.get(URI + `/outlier/${req.year}/${req.month}`)
+const [reader_by_month_data, setreader_by_month_data] = useState(null)
+const [reader_year_month, setreader_year_month] = useState({'year' : 2023 ,  'month' : 12})
+
+
+const [productionstatus_year_month, setproductionstatus_year_month] = useState({'year' : 2023 ,  'month' : 12})
+const [production_status_data, setproduction_status_data] = useState(null)
+
+
+
+const GetReaderByMonth = (req) => {
+    console.log(data[0].dat)
+    Axios.get(URI + `/readerbymonth/${req.year}/${req.month}`)
     .then(res => {
         let getDocs , data  
         getDocs = res.data 
         data = {
             "data": getDocs,
-            "titles": ["Firm ID", "Establishment", "Interviewer", "Product ID", "%", "Month Price" , "View"],
-            "fields": ["firm_id", "establishment_name", 'interviewer_name' , "firm_product_id", "percent_change", "current_monthly_price"],
+            "titles": [ "Interviewer ID", "Interviewer", "Month", "Year" , "Submitted" ],
+            "fields": ["interviewer_id", 'interviewer_name' , "month", "fp01y" , "records_submitted"],
           }
-        setoutlier_data(data)
+        setreader_by_month_data(data)
+    })
+}
+const GetProductionByMonth = (req) => {
+    Axios.get(URI + `/productionstatus/${req.year}/${req.month}`)
+    .then(res => {
+        let getDocs , data  
+        getDocs = res.data 
+        data = getDocs
+        setproduction_status_data(data)
     })
 }
 useEffect(() => {
-    GetOutlier({'year' : 2023 ,  'month' : 12})
+    GetProductionByMonth(productionstatus_year_month)
+    GetReaderByMonth(reader_year_month)
 }, [])
 
-const HandleOutlierQuery = (year_month) => {
+
+
+const HandleReaderQuery = (year_month) => {
     let year , month 
     year = year_month.slice(0 , year_month.indexOf("-")) 
     month = year_month.slice(-2) 
-   
+    setreader_year_month({year , month})
     new Promise((resolve, reject) => {
-        setoutlier_data(null)
+        setreader_by_month_data(null)
         resolve()
     })
-    .then(res =>  GetOutlier({'year' : year ,  'month' : month}))
+    .then(res =>  GetReaderByMonth({'year' : year ,  'month' : month}))
+
+}
+const HandleProductionQuery = (year_month) => {
+    let year , month 
+    year = year_month.slice(0 , year_month.indexOf("-")) 
+    month = year_month.slice(-2) 
+    setproductionstatus_year_month({year , month})
+    new Promise((resolve, reject) => {
+        setproduction_status_data(null)
+        resolve()
+    })
+    .then(res =>  GetProductionByMonth({'year' : year ,  'month' : month}))
 
 }
 return (
@@ -61,11 +90,11 @@ return (
             <Navigation title={"Statistics"} />
             <MainContent>
                 <Grid>
-                    <Col sm={12} md={8} lg={8} funcss={"padding"}>
+                    <Col sm={12} md={7} lg={7} funcss={"padding"}>
                         <Card
                             header={<div className={"padding bb"}>
-                                <Text text={"main"} block/>
-                                <Text heading={"h3"} text={"Graph"} bold block/>
+                                <Text text={"Total"} block/>
+                                <Text heading={"h3"} text={"Records Submission"} bold block/>
                             </div>}
                             funcss='roundEdge'
                             xl
@@ -78,35 +107,21 @@ return (
                         />
                     </Col>
 
-                    <Col sm={12} md={4} lg={4} funcss="padding">
+                    <Col sm={12} md={5} lg={5} funcss="padding">
                         <Card
                             header={<div className={"padding bb"}>
-                                <Text text={"Pie"} block/>
-                                <Text heading={"h3"} text={"Chart"} bold block/>
-                            </div>}
-                            funcss='roundEdge'
-                            xl
-                            body={
-                                <div className={"padding-20"}>
-                                    <Chart title={"Heading One"} data={data[0].data} id={data[0].id}  height={"220px"}/>
-                                </div>
-                            }
-
-                        />
-                    </Col>
-
-
-                </Grid>
-
-
-                <Section gap={2} />
-                <Card
-                style={{gap:0}}
-                    header={<div className={"padding bb"}>
-                        <RowFlex gap={1} justify="space-between">
+                             <RowFlex gap={1} justify="space-between">
                             <div>
-                            <Text text={"Data"} block/>
-                        <Text heading={"h3"} text={"Table"} bold block/>
+                            <Text text={"Production Status"} block/>
+                         <div>
+                         <Text 
+                         heading={"h3"} 
+                         text={` ${productionstatus_year_month.year} - ${productionstatus_year_month.month}`}
+                         bold 
+                         block
+                         color="primary"
+                         />
+                         </div>
                             </div>
                             <div>
                                 <div>
@@ -120,7 +135,61 @@ return (
                                 <Input
                                 type='month'
                                 bordered
-                                onChange={(e) => HandleOutlierQuery(e.target.value)}
+                                onChange={(e) => HandleProductionQuery(e.target.value)}
+                                />
+                            </div>
+                        </RowFlex>
+                            </div>}
+                            funcss='roundEdge'
+                            xl
+                            body={
+                                <div className={"padding-30"}>
+                                    {
+                                        production_status_data && 
+                                    <Chart title={"Heading One"} data={production_status_data} id={"p1"}  height={"220px"}/>
+                                    }
+                                </div>
+                            }
+
+                        />
+                    </Col>
+
+
+                </Grid>
+
+                <Section gap={2} />
+        
+                <Card
+                style={{gap:0}}
+                    header={<div className={"padding bb"}>
+                        <RowFlex gap={1} justify="space-between">
+                            <div>
+                            <Text text={"Reader"} block/>
+                         <RowFlex>
+                         <div>
+                         <Text 
+                         heading={"h3"} 
+                         text={` ${reader_year_month.year} - ${reader_year_month.month}`}
+                         bold 
+                         block
+                         color="primary"
+                         />
+                         </div>
+                         </RowFlex>
+                            </div>
+                            <div>
+                                <div>
+                                    <Text 
+                                    text="Month/Year*"
+                                    size="small"
+                                    bold 
+                                    color="dark200"
+                                    />
+                                </div>
+                                <Input
+                                type='month'
+                                bordered
+                                onChange={(e) => HandleReaderQuery(e.target.value)}
                                 />
                             </div>
                         </RowFlex>
@@ -130,21 +199,8 @@ return (
                     body={
                         <div className={""}>
                           {
-                            outlier_data ?
-                            <Table data={outlier_data}  funcss={"text-small"} pageSize={20}
-                              customColumns={[
-                    {
-                      title: 'Actions',
-                      render: (data) => (
-                        <Circle bg='primary' size={1.5} onClick={() => {
-
-                        }}>
-                          <PiEye />
-                        </Circle>
-                      ),
-                    },
-                  ]}  
-                            
+                            reader_by_month_data ?
+                            <Table data={reader_by_month_data}  funcss={"text-small"} pageSize={15}   
                             />
                             : <div className='height-400 dark600 skeleton  padding-50' />
                           }
@@ -159,3 +215,4 @@ return (
 }
 
 export default Statistics
+

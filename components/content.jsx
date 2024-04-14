@@ -4,8 +4,10 @@ const MainContent = ({children}) => {
     return (
         <SideContent
             content={
-                <div className={"padding-top-90"}>
-                    {children}
+                <div className={"padding-top-50"}>
+                   <div className="padding-20">
+                   {children}
+                   </div>
                 </div>
             }
         />
