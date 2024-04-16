@@ -204,7 +204,7 @@ return (
                                 {
                                   title: 'Actions',
                                   render: (data) => (
-                                    <Text text={data.percent_change} size="minified" color="primary" bold/>
+                                    <Text text={data.percent_change} size="minified" bg="dark200" funcss='padding-5 roundEdgeSmall' bold/>
                                   ),
                                 } ,
                     {
