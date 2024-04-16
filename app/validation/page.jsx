@@ -18,8 +18,9 @@ const Chart = dynamic(()=>import("@/components/Graph") ,{ssr:false})
 const GraphChart = dynamic(() => import("@/components/RangeGraph"), { ssr: false })
 import Input from 'funuicss/ui/input/Input' 
 import RowFlex from 'funuicss/ui/specials/RowFlex'
-import { PiCheck, PiEye } from 'react-icons/pi';
+import { PiCheck, PiEye, PiX } from 'react-icons/pi';
 import Circle from "funuicss/ui/specials/Circle"
+import Modal from 'funuicss/ui/modal/Modal'
 const Statistics = ()=>{
 
 const [outlier_data, setoutlier_data] = useState(null) 
@@ -32,8 +33,8 @@ const GetOutlier = (req) => {
         getDocs = res.data 
         data = {
             "data": getDocs,
-            "titles": ["Firm ID", "Establishment", "Interviewer" , "Year", "Currency", "Pre Month price" , "Curr Month price" , "Price Diff" ,"%", "Month Price" , "status" , "View" , "Validate"],
-            "fields": ["firm_id", "establishment_name", 'interviewer_name' ,  "selected_year","product_currency",  "previous_monthly_price" ,  "current_monthly_price", "price_difference",  "percent_change", "current_monthly_price"],
+            "titles": ["Firm ID", "Establishment", "Interviewer" , "Year", "Currency", "Prev Month price" , "Current Month price" , "Price Diff", "percentage Change" ,"status" , "View" , "Validate"],
+            "fields": ["firm_id", "establishment_name", 'interviewer_name' ,  "selected_year","product_currency",  "previous_monthly_price" ,  "current_monthly_price", "price_difference"],
           }
         setoutlier_data(data)
     })
@@ -57,10 +58,103 @@ const HandleOutlierQuery = (year_month) => {
 }
 
 
+const [selected_data, setselected_data] = useState("")
+const [viewModal, setviewModal] = useState(false)
+
 return (
         <div>
             <Navigation title={"Statistics"} active={3} />
             <MainContent>
+
+          {
+            selected_data && 
+            <Modal
+            open={viewModal}
+    maxWidth='1000px'
+    animation='SlideDown'
+    flat
+    close={<PiX size={30} className='pointer hover-text-error' onClick={() => setviewModal(false)}/>}
+    title={
+<>
+<Text heading='h5' bold text={selected_data.interviewer_name} block/>
+  <Text bold text={selected_data.establishment_name} size='small' color="primary"/>
+</>
+  }
+            body={<>
+              <Grid>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Interviewer ID" block/>
+    <Text size='minified'  text={selected_data.interviewer_id} block/>
+  </Col>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Interviewer" block/>
+    <Text size='minified'  text={selected_data.interviewer_name} block/>
+  </Col>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Establishment" block/>
+    <Text size='minified'  text={selected_data.establishment_name} block/>
+  </Col>
+  </Grid>
+  <Section gap={1} funcss='bb'/>
+  <Grid>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Firm ID" block/>
+    <Text size='minified'  text={selected_data.firm_id} block/>
+  </Col>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Product ID" block/>
+    <Text size='minified'  text={selected_data.product_id} block/>
+  </Col>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Firm Product ID" block/>
+    <Text size='minified'  text={selected_data.firm_product_id} block/>
+  </Col>
+  <Col sm={12} md={12} lg={12} funcss='padding'>
+    <Text size='small' bold color="primary" text="Firm Product Description" block funcss="margin-bottom-5"/>
+    <div className="padding-20 dark800 roundEdgeSmall text-dark300">
+    <Text size='minified'  text={selected_data.firm_product_description} article block/>
+    </div>
+  </Col>
+  </Grid>
+  <Section gap={1} funcss='bb'/>
+  <Grid>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Year" block/>
+    <Text size='minified'  text={selected_data.selected_year} block/>
+  </Col>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Month" block/>
+    <Text size='minified'  text={selected_data.Current_month} block/>
+  </Col>
+  <Col sm={6} md={4} lg={4} funcss='padding'>
+    <Text size='small' bold color="primary" text="Currency" block/>
+    <Text size='minified'  text={selected_data.product_currency} block/>
+  </Col>
+  </Grid>
+  <Section gap={1} funcss='bb'/>
+  <Grid>
+  <Col sm={6} md={3} lg={3} funcss='padding'>
+    <Text size='small' bold color="primary" text="Current Month Price" block/>
+    <Text size='minified'  text={selected_data.current_monthly_price} block/>
+  </Col>
+  <Col sm={6} md={3} lg={3} funcss='padding'>
+    <Text size='small' bold color="primary" text="Prev Month" block/>
+    <Text size='minified'  text={selected_data.previous_monthly_price} block/>
+  </Col>
+  <Col sm={6} md={3} lg={3} funcss='padding'>
+    <Text size='small' bold color="primary" text="Price Difference" block/>
+    <Text size='minified'  text={selected_data.price_difference} block/>
+  </Col>
+  <Col sm={6} md={3} lg={3} funcss='padding'>
+    <Text size='small' bold color="primary" text="Percentage Change" block/>
+    <Text size='minified'  text={selected_data.percent_change} bold  block/>
+  </Col>
+  </Grid>
+  <Section gap={1} funcss='bb'/>
+ 
+            </>}
+            />
+          }
   
 
                 <Section gap={2} />
@@ -107,6 +201,12 @@ return (
                             outlier_data ?
                             <Table data={outlier_data}  funcss={"text-small"} pageSize={15}
                               customColumns={[
+                                {
+                                  title: 'Actions',
+                                  render: (data) => (
+                                    <Text text={data.percent_change} size="minified" color="primary" bold/>
+                                  ),
+                                } ,
                     {
                         title: 'Actions',
                         render: (data) => (
@@ -122,7 +222,8 @@ return (
                         title: 'Actions',
                         render: (data) => (
                           <Circle bg='primary' size={1.5} onClick={() => {
-  
+                            setselected_data(data)
+                            setviewModal(true)
                           }}>
                             <PiEye />
                           </Circle>
