@@ -59,7 +59,7 @@ const HandleOutlierQuery = (year_month) => {
 
 return (
         <div>
-            <Navigation title={"Statistics"} />
+            <Navigation title={"Statistics"} active={3} />
             <MainContent>
   
 

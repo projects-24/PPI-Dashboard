@@ -29,10 +29,12 @@ const [reader_year_month, setreader_year_month] = useState({'year' : 2023 ,  'mo
 const [productionstatus_year_month, setproductionstatus_year_month] = useState({'year' : 2023 ,  'month' : 12})
 const [production_status_data, setproduction_status_data] = useState(null)
 
+const [total_records_year_month, settotal_records_year_month] = useState({'year' : 2023 ,  'month' : 12})
+const [total_records_year_month_data, settotal_records_year_month_data] = useState(null)
+
 
 
 const GetReaderByMonth = (req) => {
-    console.log(data[0].dat)
     Axios.get(URI + `/readerbymonth/${req.year}/${req.month}`)
     .then(res => {
         let getDocs , data  
@@ -52,8 +54,23 @@ const GetProductionByMonth = (req) => {
         getDocs = res.data 
         data = getDocs
         setproduction_status_data(data)
+    GetAllRecordsByMonth(total_records_year_month)
+
     })
 }
+
+
+const GetAllRecordsByMonth = (req) => {
+    Axios.get(URI + `/monthlysubmission/${req.year}/${req.month}`)
+    .then(res => {
+        let getDocs , data  
+        getDocs = res.data 
+        data = getDocs.dataPoints
+        console.log(data)
+        settotal_records_year_month_data(data)
+    })
+}
+
 useEffect(() => {
     GetProductionByMonth(productionstatus_year_month)
     GetReaderByMonth(reader_year_month)
@@ -83,24 +100,66 @@ const HandleProductionQuery = (year_month) => {
         resolve()
     })
     .then(res =>  GetProductionByMonth({'year' : year ,  'month' : month}))
-
+}
+const HandleAllRecordsQuery = (year_month) => {
+    let year , month 
+    year = year_month.slice(0 , year_month.indexOf("-")) 
+    month = year_month.slice(-2) 
+    settotal_records_year_month({year , month})
+    new Promise((resolve, reject) => {
+        settotal_records_year_month_data(null)
+        resolve()
+    })
+    .then(res =>  GetAllRecordsByMonth({'year' : year ,  'month' : month}))
 }
 return (
         <div>
-            <Navigation title={"Statistics"} />
+            <Navigation title={"Statistics"} active={2}/>
             <MainContent>
                 <Grid>
                     <Col sm={12} md={7} lg={7} funcss={"padding"}>
                         <Card
+                        style={{gap:0}}
                             header={<div className={"padding bb"}>
-                                <Text text={"Total"} block/>
-                                <Text heading={"h3"} text={"Records Submission"} bold block/>
-                            </div>}
+                            <RowFlex gap={1} justify="space-between">
+                           <div>
+                           <Text text={"Total Records submission"} block/>
+                        <div>
+                        <Text 
+                        heading={"h3"} 
+                        text={` ${total_records_year_month.year} - ${total_records_year_month.month}`}
+                        bold 
+                        block
+                        color="primary"
+                        />
+                        </div>
+                           </div>
+                           <div>
+                               <div>
+                                   <Text 
+                                   text="Month/Year*"
+                                   size="small"
+                                   bold 
+                                   color="dark200"
+                                   />
+                               </div>
+                               <Input
+                               type='month'
+                               bordered
+                               onChange={(e) => HandleAllRecordsQuery(e.target.value)}
+                               />
+                           </div>
+                       </RowFlex>
+                           </div>}
                             funcss='roundEdge'
                             xl
                             body={
-                                <div className={"padding-20"}>
-                                    <MainChart />
+                                <div className={"height-300-min relative"}>
+                                    {
+                                        total_records_year_month_data ? 
+                                    <MainChart data={total_records_year_month_data}/> 
+                                    : <div className="skeleton  absolute fit dark800 roundEdgeSmall"></div>
+                                    }
                                 </div>
                             }
 
@@ -109,6 +168,7 @@ return (
 
                     <Col sm={12} md={5} lg={5} funcss="padding">
                         <Card
+                         style={{gap:0}}
                             header={<div className={"padding bb"}>
                              <RowFlex gap={1} justify="space-between">
                             <div>
@@ -143,7 +203,7 @@ return (
                             funcss='roundEdge'
                             xl
                             body={
-                                <div className={"padding-30"}>
+                                <div className={"padding-20 height-300-min"}>
                                     {
                                         production_status_data && 
                                     <Chart title={"Heading One"} data={production_status_data} id={"p1"}  height={"220px"}/>

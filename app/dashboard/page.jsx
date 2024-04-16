@@ -86,7 +86,7 @@ export default function Home() {
 
     return (
         <div >
-            <Navigation />
+            <Navigation active={1} />
             <MainContent >
              <div className={"padding-left-20 padding-right-20"}>
                   <Div padding="20" funcss={"card roundEdgeSmall padding-20 text-dark"} margin="2rem 0 2rem 0">
@@ -109,6 +109,7 @@ export default function Home() {
                           {
                             dashboard_data && 
                             <Card
+                            style={{gap:0}}
                             xl
                             funcss='round-edge hover-up width-300 '
                             body={

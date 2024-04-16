@@ -15,42 +15,45 @@ import { GetUser, SignOut } from '@/functions/Auth';
 import { useEffect } from 'react';
 
 
-const Navigation = ({title}) => {
+const Navigation = ({title , active}) => {
 
     const mainSectionLinks = [
         {
             "route" : "/dashboard" ,
             "icon" : <PiChartBar /> ,
             "text" : "Dashboard" ,
+            "isActive" : active == 1 ? true : false
         }
         ,
         {
             "route" : "/statistics" ,
             "icon" : <PiGridFour /> ,
             "text" : "Statistics" ,
+            "isActive" : active == 2 ? true : false
         }
         ,
         {
             "route" : "/validation" ,
             "icon" : <PiChecks /> ,
             "text" : "Validation" ,
+            "isActive" : active == 3 ? true : false
         }
 
     ]
-    const HelpSectionLinks = [
-        {
-            "route" : "/" ,
-            "icon" : <PiGear /> ,
-            "text" : "Settings" ,
-        }
-        ,
-        {
-            "route" : "/" ,
-            "icon" : <PiSignOut /> ,
-            "text" : "Logout" ,
-        }
+    // const HelpSectionLinks = [
+    //     {
+    //         "route" : "/" ,
+    //         "icon" : <PiGear /> ,
+    //         "text" : "Settings" ,
+    //     }
+    //     ,
+    //     {
+    //         "route" : "/" ,
+    //         "icon" : <PiSignOut /> ,
+    //         "text" : "Logout" ,
+    //     }
 
-    ]
+    // ]
     useEffect(() => {
       GetUser()
     }, [])
@@ -65,7 +68,8 @@ const Navigation = ({title}) => {
                 funcss={" z-index-10 height-80 bb"}
                 />
             <SideBar
-                funcss="card"
+                funcss="card br flat"
+                flat
                 open={true}
                 fixed
                 header={
@@ -83,7 +87,7 @@ const Navigation = ({title}) => {
                                 mainSectionLinks.map(res => (
                                     <ListItem key={res.route}  >
                                         <Link href={res.route}>
-                                            <RowFlex gap={0.5} funcss={` padding-5 roundEdgeSmall ${res.route == "/dashboard" ? "dark800" : ""}`}>
+                                            <RowFlex gap={0.5} funcss={` padding-5 roundEdgeSmall ${res.isActive ? "card" : ""}`}>
                                                 <div className="width-30 height-30 central padding-5 roundEdgeSmall dark700 text-dark">
                                                     {res.icon}
                                                 </div>
@@ -99,31 +103,7 @@ const Navigation = ({title}) => {
                             }
                         </List>
                     </Section>
-                    <Section gap={2} funcss="bt">
-                        <Text size="small" text="Help" block funcss="padding" />
-                        <List >
-
-                            {
-                                HelpSectionLinks &&
-                                HelpSectionLinks.map(res => (
-                                    <ListItem key={res.route} >
-                                        <Link href={res.route}>
-                                            <RowFlex gap={0.5} funcss={` padding-5 roundEdgeSmall ${res.route == "/dashboard" ? "dark800" : ""}`}>
-                                                <div className="width-30 height-30 central padding-5 roundEdgeSmall dark700 text-dark">
-                                                    {res.icon}
-                                                </div>
-                                                <Text
-                                                    text={res.text}
-                                                    color="dark300"
-                                                    size="small"
-                                                />
-                                            </RowFlex>
-                                        </Link>
-                                    </ListItem>
-                                ))
-                            }
-                        </List>
-                    </Section>
+             
                 </div>}
 
             />

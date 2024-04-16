@@ -1,21 +1,23 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import CanvasJSReact from '@canvasjs/charts';
-
+import Grid from "funuicss/ui/grid/Grid"
+import Col from "funuicss/ui/grid/Col"
+import RowFlex from "funuicss/ui/specials/RowFlex"
+import Text from "funuicss/ui/text/Text"
 function MainChart({data}) {
 
  
-    
     useEffect(() => {
 
         var chart = new CanvasJSReact.Chart("chartContainer", {
             animationEnabled: true,
             theme: "light2", // "light1", "light2", "dark1", "dark2"
             title: {
-                text: "Producer Price Index (PPI) "
+                text: " "
             },
             axisY: {
-                title: "Growth Rate (in %)",
+                title: "",
             },
             axisX: {
                 title: "Regions"
@@ -34,6 +36,20 @@ function MainChart({data}) {
     return (
         <div>
             <div id={"chartContainer"} style={{ height: '250px', width: '100%' }}></div>
+            <Grid funcss="padding bt central">
+
+                {
+                    data.map(( doc) => (
+                      <div className="padding" key={doc.label}>
+                          <div className='card padding roundEdgeSmall' >
+                            <Text text={doc.y ? doc.y : doc.x ? doc.x : doc.y} bold/>
+                            <Text text={doc.label} block size="minified"/>
+                        </div>
+                      </div>
+                    ))
+                }
+                
+            </Grid>
         </div>
     )
 }
